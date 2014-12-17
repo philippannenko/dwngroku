@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.DatabaseConfiguration;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -43,6 +44,11 @@ public class MyConfiguration extends Configuration {
 
   @JsonProperty("database")
   public DataSourceFactory getDataSourceFactory() {
+    if (System.getenv("IS_LOCAL") == null) {
+      System.out.println("Dropwizard dummy DB URL (will be overridden)=" + database.getUrl());
+      DatabaseConfiguration databaseConfiguration = ExampleDatabaseConfiguration.create(System.getenv("DATABASE_URL"));
+      database = databaseConfiguration.getDataSourceFactory(null);
+    } 
     return database;
   }
 
