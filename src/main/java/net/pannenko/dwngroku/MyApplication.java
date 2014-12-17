@@ -8,6 +8,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.pannenko.dwngroku.auth.ExampleAuthenticator;
 import net.pannenko.dwngroku.domain.dao.UserDao;
+import net.pannenko.dwngroku.domain.model.User;
 import net.pannenko.dwngroku.health.TemplateHealthCheck;
 import net.pannenko.dwngroku.resource.ProtectedResource;
 import net.pannenko.dwngroku.resource.TodoAppExceptionMapper;
@@ -38,6 +39,20 @@ public class MyApplication extends Application<MyConfiguration> {
     final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
 
     final UserDao userDao = jdbi.onDemand(UserDao.class);
+
+    try {
+      userDao.clearDB();
+    } catch (Exception e) {
+
+    }
+    userDao.initDatabase();
+
+    userDao.begin();
+    for (int i = 0; i < 100; i++) {
+      User u = new User(null, "Name" + i, "username" + i, "password");
+      userDao.insert(u, u.getPassword());
+    }
+    userDao.commit();
 
     environment.jersey().register(new UserResource(userDao));
 

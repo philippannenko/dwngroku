@@ -32,4 +32,16 @@ public interface UserDao extends Transactional<UserDao> {
   @SqlQuery("SELECT * FROM app_user WHERE id = :id")
   User findById(@Bind("id") int id);
 
+  @SqlUpdate("CREATE TABLE app_user ( " +
+   " id         SERIAL NOT NULL, " +
+   " name       varchar (80) NOT NULL, " +
+   " username   varchar (80) NOT NULL, " +
+   " password   varchar (80) NOT NULL, " +
+   " PRIMARY KEY (id), " +
+   " UNIQUE (username))")
+  void initDatabase();
+
+  @SqlUpdate("DROP TABLE app_user")
+  void clearDB();
+
 }
