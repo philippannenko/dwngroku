@@ -1,9 +1,7 @@
 <div ng-app="myApp">
   <div class="form-group">
-    <label for="attrs.name" class="col-sm-2 control-label">attrs.propLabelName:</label>
-    <div class="col-sm-6">
-      <input class="form-control" id="attrs.name" name="attrs.name" type="text" placeholder="attrs.propLabelName" ng-model="myDirVar.attrs.propModel.attrs.name" required>
-    </div>
-    <span class="col-sm-4 help-block error" ng-show="(myDirVar.attrs.name.$dirty || myDirVar.submitted) && myDirVar.attrs.name.$error.required">Required</span>
+    <label for="attrs.name" class="control-label">attrs.labelName:</label>
+    <input class="form-control" id="attrs.name" name="attrs.name" type="text" placeholder="attrs.labelName" ng-model="form.attrs.model.attrs.name" required>
+    <span class="help-block error" ng-show="(form.attrs.name.$dirty || form.submitted) && form.attrs.name.$error.required">Required</span>
   </div>
 </div>

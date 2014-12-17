@@ -23,10 +23,25 @@ myApp.controller('AppCtrl', function($scope, $http, UsersResource, $q, $log) {
     $scope.selectedUser = user;
   }
   
+  $scope.delete = function(user) {
+    $log.log(user + " delete");
+    UsersResource.remove({id:user.id}).$promise.then(function(result) {
+      $scope.selectedUser = null;
+      $scope.getUsers();
+    }, function (error) {
+      error.type = "danger";
+      $log.log(user + " saved");
+    });
+  }
+  
   $scope.saveUser = function(user) {
-    debugger;
     $log.log(user + " saved");
-    $scope.selectedUser = null;
+    UsersResource.save(user).$promise.then(function(result) {
+      $scope.getUsers();
+    }, function (error) {
+      error.type = "danger";
+      $log.log(user + " saved");
+    });
   }
   
   $scope.getUsers();
@@ -39,13 +54,13 @@ myApp.directive('dwngrokuInput',function($compile) {
     require: "^form",
     replace: true,
     scope: {
-      myDirVar : '='    
+      form : '='    
     },
     templateUrl: 'templateUrl/dwngrokuInput.html',
     compile: function(tElem, tAttrs){
       var html = tElem.html().replace(/attrs.name/g, tAttrs.name);
-      html = html.replace(/attrs.propLabelName/g, tAttrs.propLabelName);
-      html = html.replace(/attrs.propModel/g, tAttrs.propModel);
+      html = html.replace(/attrs.labelName/g, tAttrs.labelName);
+      html = html.replace(/attrs.model/g, tAttrs.model);
       tElem.html(html);
     }
   }
