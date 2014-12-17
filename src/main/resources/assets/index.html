@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body ng-app="myApp" ng-controller="AppCtrl">
+  hello world. use /api/* to access REST
+  
+  <table>
+  
+  <thead></thead>
+  <tbody ng-repeat="user in users">
+    <tr><td>{{user.id}}</td><td>{{user.name}}</td></tr>
+  </tbody>
+  </table>
+
+  <script type="text/javascript" src="lib/angular.js"></script>
+  <script type="text/javascript" src="lib/angular-resource.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
