@@ -46,7 +46,7 @@ public class MyConfiguration extends Configuration {
   public DataSourceFactory getDataSourceFactory() {
     if (System.getenv("IS_LOCAL") == null) {
       System.out.println("Dropwizard dummy DB URL (will be overridden)=" + database.getUrl());
-      DatabaseConfiguration databaseConfiguration = ExampleDatabaseConfiguration.create(System.getenv("DATABASE_URL"));
+      DatabaseConfiguration<?> databaseConfiguration = ExampleDatabaseConfiguration.create(System.getenv("DATABASE_URL"));
       database = databaseConfiguration.getDataSourceFactory(null);
     } 
     return database;

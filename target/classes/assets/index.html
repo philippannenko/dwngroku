@@ -6,13 +6,20 @@
 </head>
 <body ng-app="myApp" ng-controller="AppCtrl">
   hello world. use /api/* to access REST
-  
+
+  <form ng-submit="saveUser(userForm.user)" name="userForm" novalidate>
+    <div dwngroku-input name="name" prop-model="user" my-dir-var="userForm" prop-label-name="Name"></div>
+    <button type="submit">Update Profile</button>
+  </form>
+
   <table>
-  
-  <thead></thead>
-  <tbody ng-repeat="user in users">
-    <tr><td>{{user.id}}</td><td>{{user.name}}</td></tr>
-  </tbody>
+    <thead></thead>
+    <tbody ng-repeat="user in users">
+      <tr>
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+      </tr>
+    </tbody>
   </table>
 
   <script type="text/javascript" src="lib/angular.js"></script>

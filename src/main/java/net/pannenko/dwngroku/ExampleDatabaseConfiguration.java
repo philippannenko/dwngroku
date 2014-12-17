@@ -3,7 +3,7 @@ package net.pannenko.dwngroku;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.DatabaseConfiguration;
-import io.dropwizard.setup.Environment;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +13,11 @@ import java.net.URISyntaxException;
 /**
  * This class is basically a hack to use the Heroku DATABASE_URL instead of the
  * database configuration in the Dropwizard example.yml.
- *
- * TODO Make this not so ugly
  */
+@SuppressWarnings("rawtypes")
 public class ExampleDatabaseConfiguration implements DatabaseConfiguration {
   final static Logger LOGGER = LoggerFactory.getLogger(ExampleDatabaseConfiguration.class);
-  private static DatabaseConfiguration databaseConfiguration;
+  private static DatabaseConfiguration<?> databaseConfiguration;
 
   public static DatabaseConfiguration create(String databaseUrl) {
     LOGGER.info("Creating DB for " + databaseUrl);
