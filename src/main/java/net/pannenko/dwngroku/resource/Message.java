@@ -4,7 +4,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import net.pannenko.dwngroku.Constants;
-import net.pannenko.dwngroku.service.ServiceResponse;
+import net.pannenko.dwngroku.domain.dao.ServiceResponse;
 
 public class Message {
   private String message;

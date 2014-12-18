@@ -1,4 +1,4 @@
-package net.pannenko.dwngroku.service;
+package net.pannenko.dwngroku.domain.dao;
 
 public final class ServiceResponse {
   private String message;

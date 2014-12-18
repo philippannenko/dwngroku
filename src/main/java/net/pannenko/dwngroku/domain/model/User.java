@@ -2,6 +2,10 @@ package net.pannenko.dwngroku.domain.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -9,11 +13,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity(name="App_User")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 849609613534944733L;
 
-  @NotNull
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   @NotEmpty

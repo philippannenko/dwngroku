@@ -1,9 +1,13 @@
 package net.pannenko.dwngroku;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicAuthProvider;
-import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.pannenko.dwngroku.auth.ExampleAuthenticator;
@@ -13,8 +17,6 @@ import net.pannenko.dwngroku.health.TemplateHealthCheck;
 import net.pannenko.dwngroku.resource.ProtectedResource;
 import net.pannenko.dwngroku.resource.TodoAppExceptionMapper;
 import net.pannenko.dwngroku.resource.UserResource;
-
-import org.skife.jdbi.v2.DBI;
 
 public class MyApplication extends Application<MyConfiguration> {
   public static void main(String[] args) throws Exception {
@@ -26,41 +28,37 @@ public class MyApplication extends Application<MyConfiguration> {
     return "hello-world";
   }
 
+  private final HibernateBundle<MyConfiguration> hibernate = new HibernateBundle<MyConfiguration>(User.class) {
+    @Override
+    public DataSourceFactory getDataSourceFactory(MyConfiguration configuration) {
+      return configuration.getDataSourceFactory();
+    }
+  };
+
   @Override
   public void initialize(Bootstrap<MyConfiguration> bootstrap) {
     bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.html"));
+    bootstrap.addBundle(hibernate);
   }
 
   @Override
   public void run(MyConfiguration configuration, Environment environment) throws ClassNotFoundException {
     String template = configuration.getTemplate();
-
-    final DBIFactory factory = new DBIFactory();
-    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
-
-    final UserDao userDao = jdbi.onDemand(UserDao.class);
-
-    try {
-      userDao.clearDB();
-    } catch (Exception e) {
-
-    }
-    userDao.initDatabase();
-
-    userDao.begin();
-    for (int i = 0; i < 100; i++) {
-      User u = new User(null, "Name" + i, "username" + i, "password");
-      userDao.insert(u, u.getPassword());
-    }
-    userDao.commit();
-
-    environment.jersey().register(new UserResource(userDao));
-
     environment.healthChecks().register("template", new TemplateHealthCheck(template));
-    environment.jersey().setUrlPattern("/api/*");
-    environment.jersey().register(new TodoAppExceptionMapper());
 
+    SessionFactory sf = hibernate.getSessionFactory();
+    Session session = sf.openSession();
+    User user = (User) session.get(User.class, 1);
+    session.close();
+    
+    final UserDao userDao = new UserDao(sf);
+    
+    environment.jersey().register(new UserResource(userDao));
+    environment.jersey().register(new TodoAppExceptionMapper());
     environment.jersey().register(new BasicAuthProvider<>(new ExampleAuthenticator(), "SUPER SECRET STUFF"));
     environment.jersey().register(new ProtectedResource());
+
+    environment.jersey().setUrlPattern("/api/*");
+
   }
 }

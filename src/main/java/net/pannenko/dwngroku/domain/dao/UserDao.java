@@ -1,47 +1,74 @@
 package net.pannenko.dwngroku.domain.dao;
 
-import net.pannenko.dwngroku.domain.model.User;
-import net.pannenko.dwngroku.domain.model.mapper.UserMapper;
-
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.BindBean;
-import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
-import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
-import org.skife.jdbi.v2.sqlobject.mixins.Transactional;
-
 import java.util.List;
 
-@RegisterMapper(UserMapper.class)
-public interface UserDao extends Transactional<UserDao> {
+import net.pannenko.dwngroku.Constants;
+import net.pannenko.dwngroku.domain.model.User;
 
-  @SqlUpdate("INSERT INTO app_user (name, username, password) VALUES (:u.name, :u.username, :password)")
-  @GetGeneratedKeys
-  int insert(@BindBean("u") User user, @Bind("password") String password);
+import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-  @SqlUpdate("UPDATE app_user SET name = :p.name, username = :p.username WHERE id = :p.id")
-  int update(@BindBean("p") User user);
+import io.dropwizard.hibernate.AbstractDAO;
+import io.dropwizard.hibernate.UnitOfWork;
 
-  @SqlQuery("SELECT * FROM app_user")
-  List<User> getAll();
+public class UserDao extends AbstractDAO<User> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class);
 
-  @SqlUpdate("DELETE FROM app_user WHERE id = :it")
-  int deleteById(@Bind int id);
+  public UserDao(SessionFactory factory) {
+    super(factory);
+  }
 
-  @SqlQuery("SELECT * FROM app_user WHERE id = :id")
-  User findById(@Bind("id") int id);
+  public User findById(Long id) {
+    return get(id);
+  }
 
-  @SqlUpdate("CREATE TABLE app_user ( " +
-   " id         SERIAL NOT NULL, " +
-   " name       varchar (80) NOT NULL, " +
-   " username   varchar (80) NOT NULL, " +
-   " password   varchar (80) NOT NULL, " +
-   " PRIMARY KEY (id), " +
-   " UNIQUE (username))")
-  void initDatabase();
+  public List<User> findAll() {
+    return list(namedQuery("com.example.helloworld.core.Person.findAll"));
+  }
 
-  @SqlUpdate("DROP TABLE app_user")
-  void clearDB();
+  public ServiceResponse delete(Integer id) {
+    LOGGER.trace("delete()");
+    User user = get(id);
+    if (user == null) {
+      return ServiceResponse.buildErrorResponse(Constants.FAILED_TO_FIND);
+    } else {
+      currentSession().delete(user);
+      return ServiceResponse.buildOKResponse(Constants.DELETE_SUCCESS);
+    }
+  }
+
+  public ServiceResponse getUser(Integer id) {
+    LOGGER.trace("getUser()");
+    User user = get(id);
+    if (user == null) {
+      return ServiceResponse.buildErrorResponse(Constants.FAILED_TO_FIND);
+    } else {
+      return ServiceResponse.buildOKResponse(Constants.SUCCESS, user);
+    }
+  }
+
+  public ServiceResponse update(User user) {
+    LOGGER.trace("update()");
+    if (get(user.getId()) != null) {
+      return ServiceResponse.buildErrorResponse(Constants.INVALID_INPUT);
+    } else {
+      persist(user);
+      return ServiceResponse.buildOKResponse(Constants.SUCCESS);
+    }
+  }
+
+  public ServiceResponse getAll() {
+    LOGGER.trace("listUsers()");
+
+    Criteria crit = criteria();
+    return ServiceResponse.buildOKResponse(Constants.SUCCESS, list(crit));
+  }
+
+  public ServiceResponse save(User user) {
+    persist(user);
+    return ServiceResponse.buildOKResponse(Constants.SUCCESS);
+  }
 
 }
