@@ -1,3 +1,0 @@
-12-17 09:07:19 jdbc[12]: exception
-org.h2.jdbc.JdbcSQLException: Table "APP_USER" not found; SQL statement:
-/* UserDao.getAll */ SELECT id, name, username FROM app_user [42102-182]
