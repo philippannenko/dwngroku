@@ -49,11 +49,14 @@ public class MyApplication extends Application<MyConfiguration> {
     SessionFactory sessionFactory = hibernate.getSessionFactory();
 
     Session session = sessionFactory.openSession();
-
-    for (int i = 0; i < 100; i++) {
-      session.save(new User(null, "Name" + i, "Username" + i, "password"));
+    
+    // init the data
+    if(session.get(User.class, 0) == null) {
+      for (int i = 0; i < 100; i++) {
+        session.save(new User(null, "Name" + i, "Username" + i, "password"));
+      }
     }
-
+    
     session.flush();
     session.close();
 
