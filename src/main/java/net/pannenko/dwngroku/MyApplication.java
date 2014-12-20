@@ -46,19 +46,25 @@ public class MyApplication extends Application<MyConfiguration> {
     String template = configuration.getTemplate();
     environment.healthChecks().register("template", new TemplateHealthCheck(template));
 
-    SessionFactory sf = hibernate.getSessionFactory();
-    Session session = sf.openSession();
-    User user = (User) session.get(User.class, 1);
+    SessionFactory sessionFactory = hibernate.getSessionFactory();
+
+    Session session = sessionFactory.openSession();
+
+    for (int i = 0; i < 100; i++) {
+      session.save(new User(null, "Name" + i, "Username" + i, "password"));
+    }
+
+    session.flush();
     session.close();
-    
-    final UserDao userDao = new UserDao(sf);
-    
+
+    final UserDao userDao = new UserDao(sessionFactory);
+
     environment.jersey().register(new UserResource(userDao));
-    environment.jersey().register(new TodoAppExceptionMapper());
     environment.jersey().register(new BasicAuthProvider<>(new ExampleAuthenticator(), "SUPER SECRET STUFF"));
     environment.jersey().register(new ProtectedResource());
 
     environment.jersey().setUrlPattern("/api/*");
-
+    environment.jersey().register(new TodoAppExceptionMapper());
+    
   }
 }

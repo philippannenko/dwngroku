@@ -10,31 +10,45 @@
   <div class="container">
     <p>hello world. use /api/* to access REST</p>
 
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</alert>
+
+    <ul>
+      <li>{{userForm.$valid}}</li>
+      <li>{{userForm.$pristine}}</li>
+      <li>{{userForm.$dirty}}</li>
+      <li>{{userForm.$error}}</li>
+      <li>userForm.name.$dirty:{{userForm.name.$dirty}}</li>
+      <li>userForm.name.$error.required:{{userForm.name.$error.required}}
+    </ul>
     <div class="row">
-      <form role="form" ng-submit="saveUser(userForm.user)" name="userForm" novalidate>
-        <div dwngroku-input data-name="name" data-model="user" data-form="userForm" data-label-name="Name"></div>
+      <button ng-click="log()">Click</button>
+      <form role="form" ng-submit="userForm.$valid && saveUser(userForm.model)" name="userForm" novalidate>
+        <div dwngroku-input="name" data-label="Name"></div>
+        <div dwngroku-input="username" data-label="Username"></div>
+        <div dwngroku-input=password data-label="Password"></div>
         <button type="submit" class="btn btn-primary">Update Profile</button>
       </form>
     </div>
 
-    <div class="row">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody ng-repeat="user in users">
-          <tr>
-            <td>{{user.id}}</td>
-            <td>{{user.name}}</td>
-            <td><button class="btn" ng-click="edit(user)">Edit</button> <button class="btn" ng-click="delete(user)">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!--     <div class="row"> -->
+    <!--       <table class="table"> -->
+    <!--         <thead> -->
+    <!--           <tr> -->
+    <!--             <th>Id</th> -->
+    <!--             <th>Name</th> -->
+    <!--             <th>Actions</th> -->
+    <!--           </tr> -->
+    <!--         </thead> -->
+    <!--         <tbody ng-repeat="user in users"> -->
+    <!--           <tr> -->
+    <!--             <td>{{user.id}}</td> -->
+    <!--             <td>{{user.name}}</td> -->
+    <!--             <td><button class="btn" ng-click="edit(user)">Edit</button> -->
+    <!--               <button class="btn" ng-click="delete(user)">Delete</button></td> -->
+    <!--           </tr> -->
+    <!--         </tbody> -->
+    <!--       </table> -->
+    <!--     </div> -->
   </div>
   <script type="text/javascript" src="lib/angular.js"></script>
   <script type="text/javascript" src="lib/angular-resource.js"></script>

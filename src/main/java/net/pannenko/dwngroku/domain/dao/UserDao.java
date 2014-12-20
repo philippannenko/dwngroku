@@ -1,7 +1,5 @@
 package net.pannenko.dwngroku.domain.dao;
 
-import java.util.List;
-
 import net.pannenko.dwngroku.Constants;
 import net.pannenko.dwngroku.domain.model.User;
 
@@ -11,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.dropwizard.hibernate.AbstractDAO;
-import io.dropwizard.hibernate.UnitOfWork;
 
 public class UserDao extends AbstractDAO<User> {
   private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class);
@@ -22,10 +19,6 @@ public class UserDao extends AbstractDAO<User> {
 
   public User findById(Long id) {
     return get(id);
-  }
-
-  public List<User> findAll() {
-    return list(namedQuery("com.example.helloworld.core.Person.findAll"));
   }
 
   public ServiceResponse delete(Integer id) {
@@ -61,7 +54,6 @@ public class UserDao extends AbstractDAO<User> {
 
   public ServiceResponse getAll() {
     LOGGER.trace("listUsers()");
-
     Criteria crit = criteria();
     return ServiceResponse.buildOKResponse(Constants.SUCCESS, list(crit));
   }

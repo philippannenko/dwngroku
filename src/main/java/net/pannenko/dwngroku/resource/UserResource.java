@@ -45,11 +45,7 @@ public class UserResource {
   @UnitOfWork
   @Consumes(value = { MediaType.APPLICATION_JSON })
   public Response save(User user) {
-    if (user.getId() == null) {
-      return Message.buildMessage(userDao.save(user));
-    } else {
-      return Message.buildMessage(userDao.update(user));
-    }
+    return Message.buildMessage(userDao.save(user));
   }
 
   @DELETE

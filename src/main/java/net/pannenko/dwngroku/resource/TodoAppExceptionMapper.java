@@ -10,11 +10,11 @@ import net.pannenko.dwngroku.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TodoAppExceptionMapper implements ExceptionMapper<RuntimeException> {
+public class TodoAppExceptionMapper implements ExceptionMapper<Exception> {
   private static final Logger LOG = LoggerFactory.getLogger(TodoAppExceptionMapper.class);
 
   @Override
-  public Response toResponse(RuntimeException exception) {
+  public Response toResponse(Exception exception) {
     return handleWebApplicationException(exception);
   }
 

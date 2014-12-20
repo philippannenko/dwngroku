@@ -1,7 +1,5 @@
-<div ng-app="myApp">
-  <div class="form-group">
-    <label for="attrs.name" class="control-label">attrs.labelName:</label>
-    <input class="form-control" id="attrs.name" name="attrs.name" type="text" placeholder="attrs.labelName" ng-model="form.attrs.model.attrs.name" required>
-    <span class="help-block error" ng-show="(form.attrs.name.$dirty || form.submitted) && form.attrs.name.$error.required">Required</span>
-  </div>
-</div>
+<ng-form class="form-group">
+  <label for="attrs.name" class="control-label">attrs.label:</label>
+  <input class="form-control" id="attrs.name" name="attrs.name" type="text" placeholder="attrs.label" ng-model="attrs.model.attrs.name" required>
+  <span class="help-block error" ng-show="attrs.form.attrs.name.$dirty && attrs.form.attrs.name.$error.required">Required</span>
+</ng-form>

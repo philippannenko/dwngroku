@@ -32,7 +32,7 @@ logging:
 
     # Sets the level for 'com.example.app' to DEBUG.
     net.pannenko.dwngroku: ALL
-    org.hibernate.SQL: ALL
+    org.hibernate.SQL: DEBUG
 
   appenders:
     - type: console
