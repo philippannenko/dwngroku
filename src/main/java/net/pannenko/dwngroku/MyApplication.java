@@ -50,14 +50,20 @@ public class MyApplication extends Application<MyConfiguration> {
 
     Session session = sessionFactory.openSession();
 
-    // init the data
-    for (int i = 0; i < 10; i++) {
-      session.save(new User(null, "Name" + i, "Username" + i, "password"));
+    try {
+      // init the datatry
+      for (int i = 0; i < 10; i++) {
+        session.save(new User(null, "Name" + i, "Username" + i, "password"));
+      }
+      
+      session.flush();
+      
+    } catch (Exception e) {
+
+    } finally {
+      session.close();
     }
-
-    session.flush();
-    session.close();
-
+  
     final UserDao userDao = new UserDao(sessionFactory);
 
     environment.jersey().register(new UserResource(userDao));
