@@ -8,13 +8,13 @@
         <th>Actions</th>
       </tr>
     </thead>
-    
+
     <a class="btn" href="#/-1">Create</a>
-    
+
     <tbody ng-repeat="user in users">
       <tr>
-        <td>{{user.id}}</td>
-        <td>{{user.name}}</td>
+        <td><span ng-bind="user.id"></span></td>
+        <td><span ng-bind="user.name"></span></td>
         <td><a class="btn" href="#/{{user.id}}">Edit</a>
           <button class="btn" ng-click="delete(user)">Delete</button></td>
       </tr>

@@ -21,6 +21,7 @@ myApp.factory('UsersResource', function ($resource) {
 myApp.controller('AppCtrl', function($scope, $log){
   
   $scope.alerts = [];
+  $scope.alertsBetweenPages = [];
   
   $scope.$on('addMessage', function (event, error) {
     $log.log(error); // 'Data to send'
@@ -37,6 +38,28 @@ myApp.controller('AppCtrl', function($scope, $log){
     }
   });
   
+  $scope.$on('addMessageBetweenPages', function (event, error) {
+    $log.log(error); // 'Data to send'
+    if(error.status === 422) {
+      $scope.alertsBetweenPages.push({type:'danger', message: "Data is not valid."});
+    } else if(error.data && error.data.message && error.data.type) {
+      $scope.alertsBetweenPages.push(error.data);
+    } else if (error.message && error.type) {
+      $scope.alertsBetweenPages.push(error);
+    } else if (error.status === 500) {
+      $scope.alertsBetweenPages.push({type:'danger', message: "Could not process request."});
+    } else {
+      $scope.alertsBetweenPages.push({type:'danger', message: "Could not process request."});
+    }
+  });
+  
+  $scope.$on('newPageLoaded', function () {
+    $scope.alerts = [];
+    $scope.alerts = $scope.alertsBetweenPages;
+    $scope.alertsBetweenPages = [];
+  });
+  
+  
   $scope.$on('clearMessages', function () {
     $scope.alerts = [];
   });
@@ -45,7 +68,7 @@ myApp.controller('AppCtrl', function($scope, $log){
 
 myApp.controller('UserDetailsCtrl', function($scope, $http, UsersResource, $q, cfpLoadingBar, $location, $document, $routeParams) {
   
-  $scope.$emit('clearMessages');
+  $scope.$emit('newPageLoaded');
   $scope.userForm = {};
   $scope.id =  $routeParams.id;
   $scope.label = $scope.id == -1  ? 'Create' : 'Update';
@@ -59,7 +82,7 @@ myApp.controller('UserDetailsCtrl', function($scope, $http, UsersResource, $q, c
       $scope.userForm.model = result.payload;
     }, function (error) {
       $location.path('/');
-      $scope.$emit('addMessage', error);
+      $scope.$emit('addMessageBetweenPages', error);
     }).finally(function() {
       cfpLoadingBar.complete();
     });
@@ -88,10 +111,9 @@ myApp.controller('UserDetailsCtrl', function($scope, $http, UsersResource, $q, c
     cfpLoadingBar.start();
     $scope.$emit('clearMessages');
     UsersResource.remove({id:user.id}).$promise.then(function(result) {
-      
       cfpLoadingBar.complete();
+      $scope.$emit('addMessageBetweenPages', result);
       $location.path('/');
-      $scope.$emit('addMessage', result);
     }, function (error) {
       cfpLoadingBar.complete();
       $scope.$emit('addMessage', error);
@@ -105,7 +127,7 @@ myApp.controller('UserDetailsCtrl', function($scope, $http, UsersResource, $q, c
 
 myApp.controller('UserListCtrl', function($scope, $http, UsersResource, $q, cfpLoadingBar, $document) {
   
-  $scope.$emit('clearMessages');
+  $scope.$emit('newPageLoaded');
   
   $scope.users = [];
   

@@ -19,7 +19,7 @@
     </div>
 
     <div class="row">
-      <alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</alert>
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}"><span ng-bind="alert.message"></span></alert>
     </div>
 
     <div ng-view></div>
