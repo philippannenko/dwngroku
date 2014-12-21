@@ -60,7 +60,7 @@ public class UserDao extends AbstractDAO<User> {
 
   public ServiceResponse save(User user) {
     persist(user);
-    return ServiceResponse.buildOKResponse(Constants.SUCCESS);
+    return ServiceResponse.buildOKResponse(Constants.SUCCESS, user);
   }
 
 }

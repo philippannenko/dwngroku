@@ -49,14 +49,12 @@ public class MyApplication extends Application<MyConfiguration> {
     SessionFactory sessionFactory = hibernate.getSessionFactory();
 
     Session session = sessionFactory.openSession();
-    
+
     // init the data
-    if(session.get(User.class, 0) == null) {
-      for (int i = 0; i < 100; i++) {
-        session.save(new User(null, "Name" + i, "Username" + i, "password"));
-      }
+    for (int i = 0; i < 10; i++) {
+      session.save(new User(null, "Name" + i, "Username" + i, "password"));
     }
-    
+
     session.flush();
     session.close();
 
@@ -68,6 +66,6 @@ public class MyApplication extends Application<MyConfiguration> {
 
     environment.jersey().setUrlPattern("/api/*");
     environment.jersey().register(new TodoAppExceptionMapper());
-    
+
   }
 }

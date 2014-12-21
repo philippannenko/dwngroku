@@ -1,0 +1,23 @@
+
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    
+    <a class="btn" href="#/-1">Create</a>
+    
+    <tbody ng-repeat="user in users">
+      <tr>
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+        <td><a class="btn" href="#/{{user.id}}">Edit</a>
+          <button class="btn" ng-click="delete(user)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
