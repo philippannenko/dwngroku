@@ -5,7 +5,7 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Actions</th>
+        <th></th>
       </tr>
     </thead>
 
@@ -15,8 +15,8 @@
       <tr>
         <td><span ng-bind="user.id"></span></td>
         <td><span ng-bind="user.name"></span></td>
-        <td><a class="btn" href="#/{{user.id}}">Edit</a>
-          <button class="btn" ng-click="delete(user)">Delete</button></td>
+        <td><a class="btn" href="#/user/{{user.id}}">Edit</a>
+          <a class="btn" ng-click="delete(user)">Delete</a></td>
       </tr>
     </tbody>
   </table>
