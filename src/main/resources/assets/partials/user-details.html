@@ -1,5 +1,6 @@
 <div class="row">
-  <form role="form" ng-submit="userForm.$valid && saveUser(userForm.model)" name="userForm" novalidate>
+
+  <form role="form" ng-submit="userForm.$valid && saveUser(model)" name="userForm" novalidate>
     <div dwngroku-input="name" data-label="Name"></div>
     <div dwngroku-input="username" data-label="Username"></div>
     <div dwngroku-input=password data-label="Password"></div>
@@ -7,7 +8,7 @@
   </form>
   
   <div ng-hide="isNew">
-    <button class="btn"  ng-click="delete(userForm.model)">Delete</button>
+    <button class="btn"  ng-click="delete(model)">Delete</button>
   </div>
   <a class="btn" href="/">Close</a>
 </div>
