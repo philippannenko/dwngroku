@@ -3,7 +3,7 @@ package net.pannenko.dwngroku;
 public class Constants {
   
   // Role type names
-  public static final String ROLE_TYPE_ADMIN = "admin";
+  public static final String ROLE_TYPE_ADMIN = "admin22";
   public static final String ROLE_TYPE_USER = "user";
   public static final String ROLE_TYPE_GUEST = "guest";
   
